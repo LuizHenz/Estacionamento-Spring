@@ -28,10 +28,10 @@ public class Configuracao extends Abstract{
     private LocalTime fimExpediente;
     @Getter @Setter
     @Column(name = "tempo_para_desconto", nullable = true, unique = true)
-    private LocalTime tempoParaDesconto;
+    private Integer tempoParaDesconto;
     @Getter @Setter
     @Column(name = "tempo_de_desconto", nullable = true, unique = true)
-    private LocalTime tempoDeDesconto;
+    private BigDecimal tempoDeDesconto;
     @Getter @Setter
     @Column(name = "gerar_desconto", nullable = true, unique = true)
     private Boolean gerarDesconto;

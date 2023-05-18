@@ -1,12 +1,17 @@
 package com.uniamerica.estacionamento.Service;
 
+import com.uniamerica.estacionamento.Entity.Configuracao;
 import com.uniamerica.estacionamento.Entity.Movimentacao;
+import com.uniamerica.estacionamento.Respository.ConfiguracaoRepository;
 import com.uniamerica.estacionamento.Respository.MovimentacaoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -16,6 +21,9 @@ public class MovimentacaoService {
 
     @Autowired
     private MovimentacaoRepository movimentacaoRepository;
+
+    @Autowired
+    private ConfiguracaoRepository configuracaoRepository;
 
     @Transactional
     public void cadastrar(Movimentacao movimentacao){
@@ -48,13 +56,22 @@ public class MovimentacaoService {
 
         final Movimentacao movimentacao = this.movimentacaoRepository.findById(id).orElse(null);
 
+        final Configuracao configuracao = this.configuracaoRepository.findById(1L).orElse(null);
+
+        Assert.isTrue(configuracao != null, "Configuração não encontrada.");
+        Assert.isTrue(movimentacao != null, "Movimentação não encontrada.");
+
         movimentacao.setSaida(LocalDateTime.now());
 
-        Long horas = movimentacao.getEntrada().until(movimentacao.getSaida(), ChronoUnit.HOURS);
+        final LocalDateTime saida = LocalDateTime.now();
+        Duration duracao = Duration.between(movimentacao.getEntrada(), saida);
 
-        Long tempoTotal = horas;
+        final BigDecimal horas = BigDecimal.valueOf(duracao.toHoursPart());
+        final BigDecimal minutos = BigDecimal.valueOf(duracao.toMinutesPart()).divide(BigDecimal.valueOf(60), 2, RoundingMode.HALF_EVEN);
+        BigDecimal preco = configuracao.getValorHora().multiply(horas).add(configuracao.getValorHora().multiply(minutos));
 
-        movimentacao.setTempo(tempoTotal);
+        movimentacao.setHora(duracao.toHoursPart());
+        movimentacao.setMinutos(duracao.toMinutesPart());
 
         this.movimentacaoRepository.save(movimentacao);
     }

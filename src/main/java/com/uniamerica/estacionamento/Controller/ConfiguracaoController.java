@@ -2,6 +2,7 @@ package com.uniamerica.estacionamento.Controller;
 
 import com.uniamerica.estacionamento.Entity.Configuracao;
 import com.uniamerica.estacionamento.Respository.ConfiguracaoRepository;
+import com.uniamerica.estacionamento.Service.ConfiguracaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +16,16 @@ public class ConfiguracaoController {
     @Autowired
     private ConfiguracaoRepository configuracaoRepository;
 
-    @GetMapping
-    public ResponseEntity<?> cadastrar (@RequestParam("id") final Long id){
-        final Configuracao configuracao = this.configuracaoRepository.findById(id).orElse(null);
-
-        return configuracao == null
-                ? ResponseEntity.badRequest().body("Configuracao nao encontrada")
-                : ResponseEntity.ok(configuracao);
+    @Autowired
+    private ConfiguracaoService configuracaoService;
+    @PostMapping
+    public ResponseEntity<?> cadastrar (@RequestBody final Configuracao configuracao){
+        try{
+            this.configuracaoService.cadastrar(configuracao);
+            return ResponseEntity.ok(configuracao);
+        } catch (RuntimeException erro){
+            return ResponseEntity.badRequest().body("Erro"+erro.getMessage());
+        }
     }
 
     @GetMapping("/lista")

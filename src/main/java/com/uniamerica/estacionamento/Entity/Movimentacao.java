@@ -27,8 +27,11 @@ public class Movimentacao extends Abstract{
     @Column(name = "saida")
     private LocalDateTime saida;
     @Getter @Setter
-    @Column(name = "tempo")
-    private Long tempo;
+    @Column(name = "hora")
+    private Integer hora;
+    @Getter @Setter
+    @Column(name = "minutos")
+    private Integer minutos;
     @Getter @Setter
     @Column(name = "tempo_desconto")
     private LocalTime tempoDesconto;
