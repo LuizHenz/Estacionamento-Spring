@@ -30,6 +30,8 @@ public class MarcaService {
 
         Assert.isTrue(marca.getNome() != null, "Erro, digite um nome.");
 
+        Assert.isTrue(marcaBanco != null || !marcaBanco.getId().equals(marca.getId()),"Marca já existente.");
+
         this.marcaRepository.save(marca);
     }
 

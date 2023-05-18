@@ -23,6 +23,7 @@ public class CondutorController {
     @Autowired
     public CondutorService condutorService;
 
+    //Endpoint de busca pelo condutor com base no parametro ID
     @GetMapping
     public ResponseEntity<?> findByIdParam(@RequestParam("id") final Long id){
         final Condutor condutor = this.condutorRepository.findById(id).orElse(null);
@@ -32,23 +33,27 @@ public class CondutorController {
                 : ResponseEntity.ok(condutor);
     }
 
+    //Endpoint que retorna a uma lista completa de todos os condutores armazenados no banco de dados
     @GetMapping("/lista")
     public ResponseEntity<?> listaCompleta(){
 
         return ResponseEntity.ok(this.condutorRepository.findAll());
     }
 
-    @PostMapping
-    public ResponseEntity<?> cadastrar (@RequestBody final Condutor condutor) throws IllegalAccessException {
 
+    //Endpoint com o objetivo de cadastrar um novo condutor
+    //Recebe o objeto condutor fornecido pelo corpo HTTP pois é anotado pelo RequestBody
+    @PostMapping
+    public ResponseEntity<?> cadastrar (@RequestBody final Condutor condutor) {
+        //Try executa o método da service e caso ocorra algum erro é tratado pelo blocos catchs
         try{
             this.condutorService.cadastrar(condutor);
             return ResponseEntity.ok("Regitro realizado com sucesso.");
-        } catch (DataIntegrityViolationException erro){
+        } catch (DataIntegrityViolationException erro){ //erro de violação de integridade de dados
             return ResponseEntity.internalServerError().body("Erro"+erro.getMessage());
-        } catch (RuntimeException erro){
+        } catch (RuntimeException erro){ //erro de varais exceções de tempo de execução
             return ResponseEntity.internalServerError().body("Erro"+erro.getMessage());
-        } catch (Exception erro){
+        } catch (Exception erro){ // Se ocorrer outra exceção nao capturada pelos blocos anteriores
             return ResponseEntity.badRequest().body("Erro"+erro.getMessage());
         }
         /**
@@ -68,11 +73,13 @@ public class CondutorController {
         }*/
     }
 
+
+    //Endpoint que realiza a edição de um condutor já existente com base no ID
     @PutMapping
     public ResponseEntity<?> editar (@RequestParam("id") final Long id, @RequestBody final Condutor condutor){
         try{
             final Condutor condutorData = this.condutorRepository.findById(id).orElse(null);
-
+            //Verifica se o ID de condutorData é nullo ou não é igual ao ID fornecido pelo corpo da requisição
             if(condutorData == null || !condutorData.getId().equals(condutor.getId())){
                 throw new RuntimeException("Registro nao identificado");
             }

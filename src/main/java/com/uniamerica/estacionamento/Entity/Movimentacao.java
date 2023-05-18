@@ -14,14 +14,14 @@ public class Movimentacao extends Abstract{
     @Getter
     @Setter
     @ManyToOne
-    @JoinColumn(name = "veiculo", nullable = true)
+    @JoinColumn(name = "veiculo", nullable = true, unique = true)
     private Veiculo veiculo;
     @Getter @Setter
     @ManyToOne
     @JoinColumn(name = "condutor", nullable = true)
     private Condutor condutor;
     @Getter @Setter
-    @Column(name = "entrada")
+    @Column(name = "entrada", nullable = true)
     private LocalDateTime entrada;
     @Getter @Setter
     @Column(name = "saida")
