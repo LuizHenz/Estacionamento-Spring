@@ -63,7 +63,9 @@ public class MovimentacaoService {
 
         final Configuracao configuracao = this.configuracaoRepository.findById(1L).orElse(null);
 
-        final Condutor condutor = this.condutorRepository.findById(id).orElse(null);
+        final Condutor condutor = this.condutorRepository.findById(movimentacao.getCondutor().getId()).orElse(null);
+
+
 
         //Verifica se a configuração foi encontrada
         Assert.isTrue(configuracao != null, "Configuração não encontrada.");
@@ -91,6 +93,7 @@ public class MovimentacaoService {
         BigDecimal valor = configuracao.getValorHora().multiply(horas).add(configuracao.getValorHora().multiply(minutos));
 
         movimentacao.setValorTotal(valor);
+        condutor.setTempoPago(valor);
 
 
 

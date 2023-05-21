@@ -20,15 +20,15 @@ import java.time.LocalTime;
         })*/
 public class Condutor extends Abstract{
     @Getter @Setter
-    @Size(min = 2, max = 50, message = "O nome deve ter entre 2 a 50 caracteres.")
+    //@Size(min = 2, max = 50, message = "O nome deve ter entre 2 a 50 caracteres.")
     @Column(name = "nome", nullable = true)
     private String nome;
     @Getter @Setter
-    @Size(min = 2, max = 20, message = "O CPF deve ter entre 2 a 50 caracteres.")
+    //@Size(min = 2, max = 20, message = "O CPF deve ter entre 2 a 50 caracteres.")
     @Column(name = "cpf", nullable = true, unique = true)
     private String cpf;
     @Getter @Setter
-    @Size(min = 2, max = 20, message = "O telefone deve ter entre 2 a 20 caracteres.")
+    //@Size(min = 2, max = 20, message = "O telefone deve ter entre 2 a 20 caracteres.")
     @Column(name = "telefone", nullable = true)
     private String telefone;
     @Getter @Setter

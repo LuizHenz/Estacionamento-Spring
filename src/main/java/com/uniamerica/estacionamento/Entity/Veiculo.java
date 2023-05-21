@@ -16,7 +16,7 @@ public class Veiculo extends Abstract{
     @JoinColumn(name = "modelo")
     private Modelo modelo;
     @Getter
-    @Size(min = 8, max = 10, message = "Deve ter entre 8 a 10 caracteres.")
+    //@Size(min = 8, max = 10, message = "Deve ter entre 8 a 10 caracteres.")
     @Column(name = "placa", nullable = true, unique = true)
     private String placa;
     @Getter @Setter
