@@ -29,7 +29,7 @@ public class CondutorService {
     public ResponseEntity<String> cadastrar(final Condutor condutor) {
 
         //Verifica o NOME
-        Assert.isTrue(condutor.getNome() != null , "Error digite um numero");
+        Assert.isTrue(condutor.getNome() != null , "Error digite um nome");
 
         //Verificar o CPF
         Assert.isTrue(condutor.getCpf() != null, "CPF, nao informado");
@@ -62,8 +62,7 @@ public class CondutorService {
         //verificar o CPF
         Assert.isTrue(condutorBanco != null || !condutorBanco.getId().equals(condutor.getId()),"Nao foi possivel identificar o registro");
         Assert.isTrue(condutor.getCpf() != null, "CPF, nao informado");
-        Assert.isTrue(condutorRepository.findCpf(condutor.getCpf()).isEmpty(), "CPF ja exixte");
-
+        Assert.isTrue(condutorRepository.findCpf(condutor.getCpf()).isEmpty(), "CPF ja existe");
         String regexCpf = "^\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}$";
         Assert.isTrue(condutor.getCpf().matches(regexCpf), "Error cpf com mascara errada");
 
