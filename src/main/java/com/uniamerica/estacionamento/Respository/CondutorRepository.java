@@ -24,4 +24,5 @@ public interface CondutorRepository extends JpaRepository<Condutor, Long> {
     @Query("from Condutor where telefone = :telefone")
     public List<Condutor> findTelefone(@Param("telefone") final String telefone);
 
+    public List<Condutor> findByAtivoTrue();
 }

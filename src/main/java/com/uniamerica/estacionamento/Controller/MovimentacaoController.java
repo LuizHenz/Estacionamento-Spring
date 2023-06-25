@@ -20,8 +20,8 @@ public class MovimentacaoController {
     @Autowired
     private MovimentacaoService movimentacaoService;
 
-    @GetMapping
-    public ResponseEntity<?> findByParam(@RequestParam("id") final Long id){
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findByParam(@PathVariable("id") final Long id){
         final Movimentacao movimentacao = this.movimentacaoRepository.findById(id).orElse(null);
 
         return movimentacao == null
@@ -34,6 +34,11 @@ public class MovimentacaoController {
         return ResponseEntity.ok(this.movimentacaoRepository.findAll());
     }
 
+    @GetMapping("/abertas")
+    public ResponseEntity<?> findByAberta(){
+        return ResponseEntity.ok(this.movimentacaoRepository.findByAberta());
+    }
+
     @PostMapping
     public ResponseEntity<?> cadastrar (@RequestBody final Movimentacao movimentacao){
         try{
@@ -44,8 +49,8 @@ public class MovimentacaoController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editar (@RequestParam("id") final Long id, @RequestBody final Movimentacao movimentacao){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar (@PathVariable("id") final Long id, @RequestBody final Movimentacao movimentacao){
         try{
             final Movimentacao movimentacaoBanco = this.movimentacaoRepository.findById(id).orElse(null);
 
@@ -63,7 +68,7 @@ public class MovimentacaoController {
     }
 
     @PutMapping("/saida")
-    public ResponseEntity<?> saida(@RequestParam("id") final Long id){
+    public ResponseEntity<?> saida(@PathVariable("id") final Long id){
         try{
             this.movimentacaoService.saida(id);
             return ResponseEntity.ok("Registro realizado.");
@@ -72,8 +77,8 @@ public class MovimentacaoController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deletar (@RequestParam("id") final Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletar (@PathVariable("id") final Long id){
         final Movimentacao movimentacaoBanco = this.movimentacaoRepository.findById(id).orElse(null);
 
 

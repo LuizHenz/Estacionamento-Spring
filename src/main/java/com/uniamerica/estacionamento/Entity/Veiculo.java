@@ -9,13 +9,13 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "tb_veiculos", schema = "public")
-public class Veiculo extends Abstract{
+public class    Veiculo extends Abstract{
     @Getter
     @Setter
     @ManyToOne
     @JoinColumn(name = "modelo")
     private Modelo modelo;
-    @Getter
+    @Getter@Setter
     //@Size(min = 8, max = 10, message = "Deve ter entre 8 a 10 caracteres.")
     @Column(name = "placa", nullable = true, unique = true)
     private String placa;
@@ -24,10 +24,11 @@ public class Veiculo extends Abstract{
     private int ano;
     @Getter @Setter
     @Enumerated(EnumType.STRING)
-    @Column(name = "tipo", nullable = true)
-    private Tipo tipo;
-    @Getter @Setter
-    @Enumerated(EnumType.STRING)
     @Column(name = "cor", nullable = true)
     private Cor cor;
+    @Getter @Setter
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo", nullable = true)
+    private Tipo tipo;
+
 }

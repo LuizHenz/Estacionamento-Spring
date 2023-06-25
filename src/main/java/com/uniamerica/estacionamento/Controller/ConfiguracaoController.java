@@ -18,6 +18,15 @@ public class ConfiguracaoController {
 
     @Autowired
     private ConfiguracaoService configuracaoService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable("id") final Long id){
+        final Configuracao configuracao = this.configuracaoRepository.findById(id).orElse(null);
+
+        return configuracao == null
+                ? ResponseEntity.badRequest().body("Nenhum valor encontrado")
+                : ResponseEntity.ok(configuracao);
+    }
     @PostMapping
     public ResponseEntity<?> cadastrar (@RequestBody final Configuracao configuracao){
         try{
@@ -33,26 +42,21 @@ public class ConfiguracaoController {
         return ResponseEntity.ok(this.configuracaoRepository.findAll());
     }
 
-    @PutMapping
-    public ResponseEntity<?> editar (@RequestParam("id") final Long id, @RequestBody Configuracao configuracao){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar (@PathVariable("id") final Long id, @RequestBody Configuracao configuracao){
         try{
-            final Configuracao configuracaoBanco = this.configuracaoRepository.findById(id).orElse(null);
+            this.configuracaoService.editar(id,configuracao);
 
-            if (configuracaoBanco == null || !configuracaoBanco.getId().equals(configuracao.getId())){
-                throw new RuntimeException("Nao foi possivel identificar configuracao no banco de dados.");
-            }
-
-            this.configuracaoRepository.save(configuracao);
-            return ResponseEntity.ok("Registro atualizado.");
-        }catch (DataIntegrityViolationException erro){
-            return ResponseEntity.internalServerError().body("Erro" + erro.getCause().getCause().getMessage());
-        }catch (RuntimeException erro){
-            return ResponseEntity.internalServerError().body("Erro" + erro.getMessage());
+            return ResponseEntity.ok().body("Registro salvo com sucesso");
+        }catch(DataIntegrityViolationException e){
+            return ResponseEntity.badRequest().body("Error " + e.getCause().getCause().getMessage());
+        }catch(RuntimeException e){
+            return ResponseEntity.internalServerError().body("Error " + e.getMessage());
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> delete (@RequestParam("id") final Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete (@PathVariable("id") final Long id){
         final Configuracao configuracaoBanco = this.configuracaoRepository.findById(id).orElse(null);
 
         if (configuracaoBanco == null){

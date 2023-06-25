@@ -24,8 +24,8 @@ public class CondutorController {
     public CondutorService condutorService;
 
     //Endpoint de busca pelo condutor com base no parametro ID
-    @GetMapping
-    public ResponseEntity<?> findByIdParam(@RequestParam("id") final Long id){
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findByIdParam(@PathVariable("id") final Long id){
         final Condutor condutor = this.condutorRepository.findById(id).orElse(null);
 
         return condutor == null
@@ -36,8 +36,12 @@ public class CondutorController {
     //Endpoint que retorna a uma lista completa de todos os condutores armazenados no banco de dados
     @GetMapping("/lista")
     public ResponseEntity<?> listaCompleta(){
-
         return ResponseEntity.ok(this.condutorRepository.findAll());
+    }
+
+    @GetMapping("/ativo")
+    public ResponseEntity<?> listaCompletaAtivo(){
+        return ResponseEntity.ok(this.condutorRepository.findByAtivoTrue());
     }
 
 
@@ -56,27 +60,12 @@ public class CondutorController {
         } catch (Exception erro){ // Se ocorrer outra exceção nao capturada pelos blocos anteriores
             return ResponseEntity.badRequest().body("Erro"+erro.getMessage());
         }
-        /**
-        try {
-            this.condutorRepository.save(condutor);
-            return ResponseEntity.ok("Registro realizado");
-        }  catch (DataIntegrityViolationException erro) {
-            if (erro.getMessage().contains("uq_condutor_cpf")) {
-                throw new IllegalAccessException("CPF já cadastrado.");
-            } else if (erro.getMessage().contains("uq_condutor_telefone")) {
-                throw new IllegalAccessException("Telefone já cadastrado.");
-            } else {
-                throw new IllegalAccessException("Erro ao cadastrar o condutor.");
-            }
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().body("Erro" + ex.getMessage());
-        }*/
     }
 
 
     //Endpoint que realiza a edição de um condutor já existente com base no ID
-    @PutMapping
-    public ResponseEntity<?> editar (@RequestParam("id") final Long id, @RequestBody final Condutor condutor){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar (@PathVariable("id") final Long id, @RequestBody final Condutor condutor){
         try{
             final Condutor condutorData = this.condutorRepository.findById(id).orElse(null);
             //Verifica se o ID de condutorData é nullo ou não é igual ao ID fornecido pelo corpo da requisição
@@ -93,8 +82,8 @@ public class CondutorController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> delete (@RequestParam("id") final Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete (@PathVariable("id") final Long id){
         final Condutor condutorData = this.condutorRepository.findById(id).orElse(null);
 
         try{

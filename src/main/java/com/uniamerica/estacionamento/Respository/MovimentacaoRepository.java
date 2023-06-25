@@ -18,4 +18,7 @@ public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Long
 
     @Query("from Movimentacao where condutor = :condutor")
     public List<Movimentacao> findCondutor(@RequestParam("condutor") final Condutor condutor);
+
+    @Query("FROM Movimentacao WHERE saida = null")
+    List<Movimentacao> findByAberta();
 }

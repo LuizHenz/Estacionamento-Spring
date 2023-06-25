@@ -37,8 +37,8 @@ public class ModeloController {
         return ResponseEntity.ok(new Modelo());//permite que o metodo retorne uma resposta HTTP personalizada
     }*/
 
-    @GetMapping
-    public ResponseEntity<?> findByIdParam(@RequestParam("id") final Long id){//O request e usado para vincular o valor de id com o id do tipo Long, permite buscar recurso correspondente no database
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findByIdParam(@PathVariable("id") final Long id){//O request e usado para vincular o valor de id com o id do tipo Long, permite buscar recurso correspondente no database
         final Modelo modelo = this.modeloRepository.findById(id).orElse(null);//id e procurado dentro de Modelo do database usando findById do repository
 
         return modelo == null//se modelo for igual a nulo
@@ -51,9 +51,14 @@ public class ModeloController {
         return ResponseEntity.ok(this.modeloRepository.findAll());//vai encapsular a resposta 200 e o conteudo da lista usando o metodo findall do repository, que retorna a todos o objetos de Modelo do database
     }
 
+    @GetMapping("/ativo")
+    public ResponseEntity<?> listaCompletaAtivo() {
+        return ResponseEntity.ok(this.modeloRepository.findByAtivoTrue());
+    }
+
+
     @PostMapping//anotacao para mapear solicitaçao POST para um endpoint
     public ResponseEntity<?> cadastrar(@RequestBody final Modelo modelo){
-
 
         try{
             this.modeloService.cadastro(modelo);
@@ -67,8 +72,8 @@ public class ModeloController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Modelo modelo){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final Modelo modelo){
         try{
             final Modelo modeloData = this.modeloRepository.findById(id).orElse(null);
 
@@ -85,8 +90,8 @@ public class ModeloController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> delete (@RequestParam("id") final Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete (@PathVariable("id") final Long id){
         final Modelo modeloData = this.modeloRepository.findById(id).orElse(null);
 
         try{

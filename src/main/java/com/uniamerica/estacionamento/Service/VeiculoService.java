@@ -24,32 +24,30 @@ public class VeiculoService {
     @Autowired
     MovimentacaoRepository movimentacaoRepository;
 
+    private final String regexPlaca = "^[a-zA-Z]{4}\\-d{4}$";
 
     @Transactional(rollbackFor = Exception.class)
     public void cadastrar(final Veiculo veiculo){
-        Assert.isTrue(veiculo.getModelo() != null, "Erro, digite um modelo");
-        Assert.isTrue(veiculo.getTipo() != null, "Erro, digite um tipo");
-        Assert.isTrue(veiculo.getCor() != null, "Erro, digite uma cor");
-        Assert.isTrue(veiculo.getPlaca() != null, "Erro, digite uma placa");
-        String regexPlaca = "^\\[A-Z]{3}\\-\\d{4}";
-        Assert.isTrue(veiculo.getPlaca().matches(regexPlaca), "Erro, formato da placa incorreto");
-        Assert.isTrue(this.veiculoRepository.findPlaca(veiculo.getPlaca()).isEmpty(),"Erro, placa já existente.");
+        Assert.isTrue(!veiculo.getPlaca().matches(regexPlaca),"Error a placa esta errada");
 
-        this.veiculoRepository.save(veiculo);
+        Assert.isTrue( veiculo.getPlaca().length() < 10, "Error placa, valor maximo(10) do campo atingido");
+
+        Assert.isTrue( veiculo.getAno() > 1990 && veiculo.getAno() <= 2023, "Ou esse carro e velo ou e muito novo");
+
+        this.veiculoRepository.save(veiculo);;
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void editar(final Veiculo veiculo, final Long id){
         final Veiculo veiculoBanco = this.veiculoRepository.findById(veiculo.getId()).orElse(null);
 
-        Assert.isTrue(veiculo.getModelo() != null, "Erro, digite um modelo");
-        Assert.isTrue(veiculo.getCor() != null, "Erro, digite uma cor");
-        Assert.isTrue(veiculo.getTipo() != null, "Erro, digite um tipo de veiculo");
+        Assert.isTrue(!veiculo.getPlaca().matches(regexPlaca),"Error a placa esta errada");
 
-        Assert.isTrue(veiculo.getPlaca() != null, "Erro, digite uma placa");
-        String regexPlaca = "^\\[A-Z]{3}-\\d{4}$";
-        Assert.isTrue(veiculo.getPlaca().matches(regexPlaca), "Erro, formato da placa incorreto");
-        Assert.isTrue(this.veiculoRepository.findPlaca(veiculo.getPlaca()).isEmpty(),"Erro, placa já existente.");
+        Assert.isTrue(veiculoBanco.getId().equals(id),"Error id da URL diferente do body");
+
+        Assert.isTrue(veiculoBanco != null || !veiculoBanco.getId().equals(veiculo.getId()),"Registro nao identificado");
+
+        Assert.isTrue( veiculo.getPlaca().length() > 10, "Error, valor maximo(10) do campo atingido");
 
         this.veiculoRepository.save(veiculo);
     }

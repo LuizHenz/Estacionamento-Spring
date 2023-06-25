@@ -15,33 +15,33 @@ import java.time.LocalTime;
 public class Configuracao extends Abstract{
     @Getter
     @Setter
-    @Column(name = "valor_hora", nullable = true, unique = true)
+    @Column(name = "valor_hora")
     private BigDecimal valorHora;
     @Getter @Setter
-    @Column(name = "valor_minuto_hora", nullable = true, unique = true)
+    @Column(name = "valor_minuto_hora")
     private BigDecimal valorMinutoMulta;
     @Getter @Setter
-    @Column(name = "inicio_expediente", nullable = true, unique = true)
+    @Column(name = "inicio_expediente")
     private LocalTime incioExpediente;
     @Getter @Setter
-    @Column(name = "fim_expediente", nullable = true, unique = true)
+    @Column(name = "fim_expediente")
     private LocalTime fimExpediente;
     @Getter @Setter
-    @Column(name = "tempo_para_desconto", nullable = true, unique = true)
+    @Column(name = "tempo_para_desconto")
     private Integer tempoParaDesconto;
     @Getter @Setter
-    @Column(name = "tempo_de_desconto", nullable = true, unique = true)
+    @Column(name = "tempo_de_desconto")
     private BigDecimal tempoDeDesconto;
     @Getter @Setter
-    @Column(name = "gerar_desconto", nullable = true, unique = true)
+    @Column(name = "gerar_desconto")
     private Boolean gerarDesconto;
     @Getter @Setter
-    @Column(name = "vagas_moto", nullable = true, unique = true)
+    @Column(name = "vagas_moto")
     private Integer vagasMotos;
     @Getter @Setter
-    @Column(name = "vagas_vans", nullable = true, unique = true)
+    @Column(name = "vagas_vans")
     private Integer vagasVans;
     @Getter @Setter
-    @Column(name = "vagas_carro", nullable = true, unique = true)
+    @Column(name = "vagas_carro")
     private Integer vagasCarro;
 }

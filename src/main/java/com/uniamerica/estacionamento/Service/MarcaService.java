@@ -18,10 +18,9 @@ public class MarcaService {
 
     @Transactional(rollbackFor = Exception.class)
         public void cadastrar(final Marca marca){
-            Assert.isTrue(!marca.getNome().isBlank(), "Erro, nome vazio");
-            Assert.isTrue(this.marcaRepository.findNome(marca.getNome()).isEmpty(), "Marca já existente.");
+        Assert.isTrue(marca.getNome() != null,"Error nome vazio, bruh");
 
-            this.marcaRepository.save(marca);
+        this.marcaRepository.save(marca);
     }
 
     @Transactional(rollbackFor = Exception.class)

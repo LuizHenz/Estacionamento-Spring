@@ -13,11 +13,6 @@ import java.time.LocalTime;
 
 @Entity
 @Table(name = "tb_condutores", schema = "public")
-        /**
-        uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"cpf"}, name = "uq_condutor_cpf"),
-        @UniqueConstraint(columnNames = {"telefone"}, name = "uq_condutor_telefone")
-        })*/
 public class Condutor extends Abstract{
     @Getter @Setter
     //@Size(min = 2, max = 50, message = "O nome deve ter entre 2 a 50 caracteres.")

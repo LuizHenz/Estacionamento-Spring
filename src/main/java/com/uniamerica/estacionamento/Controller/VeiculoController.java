@@ -25,8 +25,8 @@ public class VeiculoController {
     @Autowired
     private VeiculoService veiculoService;
 
-    @GetMapping
-    public ResponseEntity<?> findByIdParam(@RequestParam("id") final Long id){
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findByIdParam(@PathVariable("id") final Long id){
         final Veiculo veiculo = veiculoRepository.findById(id).orElse(null);
 
         return veiculo == null
@@ -39,8 +39,13 @@ public class VeiculoController {
         return ResponseEntity.ok(this.veiculoRepository.findAll());
     }
 
+    @GetMapping("/ativo")
+    public ResponseEntity<?> listaCompletaAtivo(){
+        return ResponseEntity.ok(this.veiculoRepository.findAll());
+    }
+
     @PostMapping
-    public ResponseEntity<?> cadastrar(@RequestBody @Validated final Veiculo veiculo){
+    public ResponseEntity<?> cadastrar(@RequestBody final Veiculo veiculo){
 
         try{
             this.veiculoService.cadastrar(veiculo);
@@ -53,8 +58,8 @@ public class VeiculoController {
             return ResponseEntity.badRequest().body("Erro" + erro.getMessage());
         }
     }
-     @PutMapping
-    public ResponseEntity<?> editar(@RequestParam("id") final Long id, @RequestBody final Veiculo veiculo){
+     @PutMapping("/{id}")
+    public ResponseEntity<?> editar(@PathVariable("id") final Long id, @RequestBody final Veiculo veiculo){
         try{
             final Veiculo veiculoBanco = this.veiculoRepository.findById(id).orElse(null);
 
@@ -62,7 +67,7 @@ public class VeiculoController {
                 throw new RuntimeException("Nao foi possivel identificar o registro no banco de dados");
             }
 
-            this.veiculoRepository.save(veiculo);
+            this.veiculoService.editar(veiculo, id);
             return ResponseEntity.ok("Registro atualizado");
         }catch (DataIntegrityViolationException erro){
             return ResponseEntity.internalServerError().body("Erro" + erro.getCause().getCause().getMessage());
@@ -71,8 +76,8 @@ public class VeiculoController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> delete (@RequestParam("id") final Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete (@PathVariable("id") final Long id){
         final Veiculo veiculoBanco = this.veiculoRepository.findById(id).orElse(null);
 
         try{

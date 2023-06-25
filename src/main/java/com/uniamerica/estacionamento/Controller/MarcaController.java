@@ -23,8 +23,8 @@ public class MarcaController {
     @Autowired
     public MarcaService marcaService;
 
-    @GetMapping
-    public ResponseEntity<?> findByParam(@RequestParam("id") final Long id){
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findByParam(@PathVariable("id") final Long id){
         final Marca marca = this.marcaRepository.findById(id).orElse(null);
 
         return marca == null
@@ -36,6 +36,10 @@ public class MarcaController {
         return ResponseEntity.ok(this.marcaRepository.findAll());
     }
 
+    @GetMapping("/ativo")
+    public ResponseEntity<?> listaCompletaAtivo() {
+        return ResponseEntity.ok(this.marcaRepository.findByAtivoTrue());
+    }
     @PostMapping
     public ResponseEntity<?> cadastrar(@RequestBody final Marca marca){
         try{
@@ -46,8 +50,8 @@ public class MarcaController {
         }
     }
 
-    @PutMapping
-    public ResponseEntity<?> editar (@RequestParam("id") final Long id, @RequestBody final Marca marca){
+    @PutMapping("/{id}")
+    public ResponseEntity<?> editar (@PathVariable("id") final Long id, @RequestBody final Marca marca){
         try{
             final Marca marcaBanco = this.marcaRepository.findById(id).orElse(null);
 
@@ -64,8 +68,8 @@ public class MarcaController {
         }
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> delete (@RequestParam("id") final Long id){
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete (@PathVariable("id") final Long id){
         final Marca marcaBanco = this.marcaRepository.findById(id).orElse(null);
 
         try{

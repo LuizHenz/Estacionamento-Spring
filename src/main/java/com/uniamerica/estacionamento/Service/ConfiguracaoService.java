@@ -22,6 +22,9 @@ public class ConfiguracaoService {
         Assert.isTrue(config.getFimExpediente() != null, "Fim expediente não informado");
         Assert.isTrue(config.getTempoParaDesconto() != null, "Tempo desconto não informado");
         Assert.isTrue(config.getGerarDesconto() != null, "Gerar desconto não informado");
+        Assert.isTrue(config.getVagasCarro()  != null, "Vagas de carro não informado");
+        Assert.isTrue(config.getVagasVans() != null, "Vagas de van não informado");
+        Assert.isTrue(config.getVagasMotos() != null, "Vagas de moto não informado");
 
         this.configuracaoRepository.save(config);
     }

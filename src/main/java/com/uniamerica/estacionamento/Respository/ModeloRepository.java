@@ -1,5 +1,6 @@
 package com.uniamerica.estacionamento.Respository;
 
+import com.uniamerica.estacionamento.Entity.Condutor;
 import com.uniamerica.estacionamento.Entity.Marca;
 import com.uniamerica.estacionamento.Entity.Modelo;
 import com.uniamerica.estacionamento.Entity.Veiculo;
@@ -23,4 +24,6 @@ public interface ModeloRepository extends JpaRepository<Modelo, Long> {
 
     @Query("from Modelo where marca = :idMarca")
     public List<Modelo> findMarca(@Param("idMarca") final Marca idMarca);
+
+    public List<Modelo> findByAtivoTrue();
 }
