@@ -2,6 +2,7 @@ package com.uniamerica.estacionamento;
 
 import com.uniamerica.estacionamento.Entity.Condutor;
 import com.uniamerica.estacionamento.Entity.Veiculo;
+import jakarta.persistence.PrePersist;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,8 +47,9 @@ public class Recibo {
         this.desconto = desconto;
     }
 
-    public Recibo(){
-
+    @PrePersist
+    public void prePersist(){
+        this.saida = null;
     }
 
 

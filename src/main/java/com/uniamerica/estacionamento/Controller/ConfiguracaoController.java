@@ -31,7 +31,7 @@ public class ConfiguracaoController {
     public ResponseEntity<?> cadastrar (@RequestBody final Configuracao configuracao){
         try{
             this.configuracaoService.cadastrar(configuracao);
-            return ResponseEntity.ok(configuracao);
+            return ResponseEntity.ok("Registro realizado com sucesso");
         } catch (RuntimeException erro){
             return ResponseEntity.badRequest().body("Erro"+erro.getMessage());
         }
