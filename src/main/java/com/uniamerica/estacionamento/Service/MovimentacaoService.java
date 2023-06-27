@@ -65,7 +65,7 @@ public class MovimentacaoService {
 
         final Condutor condutor = this.condutorRepository.findById(movimentacao.getCondutor().getId()).orElse(null);
 
-
+        Assert.isTrue(movimentacao.getSaida() == null, "Movimentação já encerrada.");
         //Verifica se a configuração foi encontrada
         Assert.isTrue(configuracao != null, "Configuração não encontrada.");
         //Verifica se a movimentação foi encontrada
@@ -122,6 +122,8 @@ public class MovimentacaoService {
                 movimentacao.getCondutor().getTempoDesconto(),
                 movimentacao.getValorTotal(),
                 movimentacao.getValorDesconto());
+
+
     }
 
     @Transactional

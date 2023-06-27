@@ -36,6 +36,8 @@ public class Recibo {
     @Getter @Setter
     private BigDecimal desconto;
 
+
+
     public Recibo(LocalDateTime entrada, LocalDateTime saida, Condutor condutor, Veiculo veiculo, Integer horas, BigDecimal horasDesconto, BigDecimal valor, BigDecimal desconto) {
         this.entrada = entrada;
         this.saida = saida;
@@ -45,11 +47,6 @@ public class Recibo {
         this.horasDesconto = horasDesconto;
         this.valor = valor;
         this.desconto = desconto;
-    }
-
-    @PrePersist
-    public void prePersist(){
-        this.saida = null;
     }
 
 
