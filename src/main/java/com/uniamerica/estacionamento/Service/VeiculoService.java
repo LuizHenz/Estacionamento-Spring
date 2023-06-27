@@ -24,15 +24,15 @@ public class VeiculoService {
     @Autowired
     MovimentacaoRepository movimentacaoRepository;
 
-    private final String regexPlaca = "^[a-zA-Z]{4}\\-d{4}$";
+    private final String regexPlaca = "^[a-zA-Z]{4}-\\d{4}$";
 
     @Transactional(rollbackFor = Exception.class)
     public void cadastrar(final Veiculo veiculo){
-        Assert.isTrue(!veiculo.getPlaca().matches(regexPlaca),"Error a placa esta errada");
+        Assert.isTrue(veiculo.getPlaca().matches(regexPlaca),"Error a placa esta errada");
 
         Assert.isTrue( veiculo.getPlaca().length() < 10, "Error placa, valor maximo(10) do campo atingido");
 
-        Assert.isTrue( veiculo.getAno() > 1990 && veiculo.getAno() <= 2023, "Ou esse carro e velo ou e muito novo");
+        Assert.isTrue( veiculo.getAno() > 1990 && veiculo.getAno() <= 2023, "Ou esse carro é velho ou muito novo");
 
         this.veiculoRepository.save(veiculo);;
     }
@@ -61,7 +61,7 @@ public class VeiculoService {
         if (veiculoLista.isEmpty()){
             this.veiculoRepository.delete(veiculoBanco);
         }else{
-            veiculoBanco.setAtivo(false);
+            veiculoBanco.setAtivo(Boolean.FALSE);
             this.veiculoRepository.save(veiculo);
         }
     }

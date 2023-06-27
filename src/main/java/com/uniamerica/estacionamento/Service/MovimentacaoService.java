@@ -3,6 +3,7 @@ package com.uniamerica.estacionamento.Service;
 import com.uniamerica.estacionamento.Entity.Condutor;
 import com.uniamerica.estacionamento.Entity.Configuracao;
 import com.uniamerica.estacionamento.Entity.Movimentacao;
+import com.uniamerica.estacionamento.Recibo;
 import com.uniamerica.estacionamento.Respository.CondutorRepository;
 import com.uniamerica.estacionamento.Respository.ConfiguracaoRepository;
 import com.uniamerica.estacionamento.Respository.MovimentacaoRepository;
@@ -15,8 +16,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 @Service
 public class MovimentacaoService {
@@ -33,10 +32,13 @@ public class MovimentacaoService {
     @Transactional
     public void cadastrar(Movimentacao movimentacao){
 
+        if (movimentacao.getEntrada() == null){
+            movimentacao.setEntrada(LocalDateTime.now());
+        }
+
+
         Assert.isTrue(movimentacao.getVeiculo() != null, "Veiculo nao informado");
         Assert.isTrue(movimentacao.getCondutor() != null, "Condutor nao informada");
-        Assert.isTrue(movimentacao.getEntrada() != null, "Entradada nao informado");
-        Assert.isTrue(movimentacao.getSaida() != null, "Saida nao informada");
 
         this.movimentacaoRepository.save(movimentacao);
 
@@ -47,8 +49,6 @@ public class MovimentacaoService {
 
         Assert.isTrue(movimentacao.getVeiculo() != null, "Veiculo nao informado");
         Assert.isTrue(movimentacao.getCondutor() != null, "Condutor nao informada");
-        Assert.isTrue(movimentacao.getEntrada() != null, "Entradada nao informado");
-        Assert.isTrue(movimentacao.getSaida() != null, "Saida nao informada");
 
         final Movimentacao moviBanco = this.movimentacaoRepository.findById(id).orElse(null);
         Assert.isTrue(moviBanco != null, "nao foi possivel encontrar o registro");
@@ -57,14 +57,13 @@ public class MovimentacaoService {
         this.movimentacaoRepository.save(movimentacao);
     }
     @Transactional(rollbackOn = Exception.class)
-    public void saida (final Long id){
+    public Recibo saida (final Long id){
 
         final Movimentacao movimentacao = this.movimentacaoRepository.findById(id).orElse(null);
 
         final Configuracao configuracao = this.configuracaoRepository.findById(1L).orElse(null);
 
         final Condutor condutor = this.condutorRepository.findById(movimentacao.getCondutor().getId()).orElse(null);
-
 
 
         //Verifica se a configuração foi encontrada
@@ -74,6 +73,7 @@ public class MovimentacaoService {
 
         //Definida a hora e data atual ao atributo saida
         movimentacao.setSaida(LocalDateTime.now());
+        movimentacao.setAtivo(Boolean.FALSE);
 
         //É criada uma variavel saida com a hora e data atual
         final LocalDateTime saida = LocalDateTime.now();
@@ -87,25 +87,41 @@ public class MovimentacaoService {
         //O preço é calculado multiplicando o valor de hora pelo numero de horas e adicionando o valor hora multiplicado pelos minutos
         BigDecimal preco = configuracao.getValorHora().multiply(horas).add(configuracao.getValorHora().multiply(minutos));
 
-        movimentacao.setHora(duracao.toHoursPart());//O numero de horas da duração é atribuido ao atributo hora
-        movimentacao.setMinutos(duracao.toMinutesPart());//O numero de minutos de duração é atribuido ao atributo minutos
+//        movimentacao.setHora(duracao.toHoursPart());//O numero de horas da duração é atribuido ao atributo hora
+//        movimentacao.setMinutos(duracao.toMinutesPart());//O numero de minutos de duração é atribuido ao atributo minutos
+//
+//        BigDecimal valor = configuracao.getValorHora().multiply(horas).add(configuracao.getValorHora().multiply(minutos));
 
-        BigDecimal valor = configuracao.getValorHora().multiply(horas).add(configuracao.getValorHora().multiply(minutos));
+        if(configuracao.isGerarDesconto()){
+            if(condutor.getTempoDesconto().compareTo(new BigDecimal(configuracao.getTempoParaDesconto())) > 0){
+                System.out.println(condutor.getTempoDesconto().compareTo(new BigDecimal(configuracao.getTempoParaDesconto())));
+                movimentacao.setValorDesconto(preco.subtract(configuracao.getTempoDeDesconto()));
+            }else{
+                condutor.setTempoDesconto(horas.add(minutos));
+            }
+        }else{
+            condutor.setTempoDesconto(horas.add(minutos));
+        }
 
-        movimentacao.setValorTotal(valor);
-        condutor.setTempoPago(valor);
+        Integer horasI = horas.intValue();
+        Integer minutosI = minutos.intValue();
 
+        condutor.setTempoPago(preco);
 
-
-//        Relatorio relatorio = new Relatorio(moviBanco.getEntrada(), moviBanco.getSaida(), moviBanco.getCondutor(),
-//                moviBanco.getVeiculo(), moviBanco.getTempoHora(), condutor.getTempoDesconto(),
-//                precos.subtract(valor_desconto).setScale(2,RoundingMode.HALF_EVEN),
-//                moviBanco.getValorDeconto());
-
-
-        this.condutorRepository.save(condutor);
+        movimentacao.setHora(horasI);
+        movimentacao.setMinutos(minutosI);
+        movimentacao.setValorTotal(preco);
 
         this.movimentacaoRepository.save(movimentacao);
+
+        return new Recibo(movimentacao.getEntrada(),
+                movimentacao.getSaida(),
+                movimentacao.getCondutor(),
+                movimentacao.getVeiculo(),
+                movimentacao.getHora(),
+                movimentacao.getCondutor().getTempoDesconto(),
+                movimentacao.getValorTotal(),
+                movimentacao.getValorDesconto());
     }
 
     @Transactional

@@ -1,9 +1,6 @@
 package com.uniamerica.estacionamento.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,4 +29,9 @@ public class Condutor extends Abstract{
     @Getter @Setter
     @Column(name = "tempo_desconto")
     private BigDecimal tempoDesconto;
+
+    @PrePersist
+    public void prePersist(){
+        this.tempoDesconto = new BigDecimal(0);
+    }
 }

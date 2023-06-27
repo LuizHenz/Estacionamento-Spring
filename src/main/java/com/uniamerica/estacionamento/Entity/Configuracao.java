@@ -34,7 +34,7 @@ public class Configuracao extends Abstract{
     private BigDecimal tempoDeDesconto;
     @Getter @Setter
     @Column(name = "gerar_desconto")
-    private Boolean gerarDesconto;
+    private boolean gerarDesconto;
     @Getter @Setter
     @Column(name = "vagas_moto")
     private Integer vagasMotos;

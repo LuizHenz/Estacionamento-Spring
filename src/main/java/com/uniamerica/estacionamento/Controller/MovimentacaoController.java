@@ -1,6 +1,7 @@
 package com.uniamerica.estacionamento.Controller;
 
 import com.uniamerica.estacionamento.Entity.Movimentacao;
+import com.uniamerica.estacionamento.Recibo;
 import com.uniamerica.estacionamento.Respository.ModeloRepository;
 import com.uniamerica.estacionamento.Respository.MovimentacaoRepository;
 import com.uniamerica.estacionamento.Service.MovimentacaoService;
@@ -42,7 +43,7 @@ public class MovimentacaoController {
     @PostMapping
     public ResponseEntity<?> cadastrar (@RequestBody final Movimentacao movimentacao){
         try{
-            this.movimentacaoRepository.save(movimentacao);
+            this.movimentacaoService.cadastrar(movimentacao);
             return ResponseEntity.ok("Registro realizado.");
         }catch (Exception erro){
             return ResponseEntity.badRequest().body("Erro" + erro.getMessage());
@@ -67,11 +68,11 @@ public class MovimentacaoController {
         }
     }
 
-    @PutMapping("/saida")
+    @PutMapping("/saida/{id}")
     public ResponseEntity<?> saida(@PathVariable("id") final Long id){
         try{
-            this.movimentacaoService.saida(id);
-            return ResponseEntity.ok("Registro realizado.");
+            Recibo recibo = this.movimentacaoService.saida(id);
+            return ResponseEntity.ok(recibo);
         } catch (RuntimeException erro){
             return ResponseEntity.badRequest().body("Erro"+erro.getMessage());
         }

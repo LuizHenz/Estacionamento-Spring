@@ -45,7 +45,7 @@ public class ModeloService {
         if(modeloLista.isEmpty()){
             this.modeloRepository.delete(modeloBanco);
         }else {
-            modeloBanco.setAtivo(false);
+            modeloBanco.setAtivo(Boolean.FALSE);
             this.modeloRepository.save(modelo);
         }
     }

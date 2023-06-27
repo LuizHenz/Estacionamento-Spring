@@ -43,10 +43,8 @@ public class MarcaService {
         if (modeloLista.isEmpty()){
             this.marcaRepository.delete(marcaBanco);
         }else{
+            marcaBanco.setAtivo(Boolean.FALSE);
             this.marcaRepository.save(marca);
-        }
-        if (marcaBanco != null){
-            marcaBanco.setAtivo(false);
         }
     }
 }

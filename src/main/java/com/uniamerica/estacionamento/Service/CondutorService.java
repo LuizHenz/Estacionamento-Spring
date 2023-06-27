@@ -82,7 +82,7 @@ public class CondutorService {
         if(movimentacaoList.isEmpty()) {
             this.condutorRepository.delete(condutorBanco);
         }else{
-            condutorBanco.setAtivo(false);
+            condutorBanco.setAtivo(Boolean.FALSE);
             this.condutorRepository.save(condutor);
         }
 
