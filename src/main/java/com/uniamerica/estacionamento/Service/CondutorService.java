@@ -39,7 +39,7 @@ public class CondutorService {
 
         //Verifica o TELEFONE
         Assert.isTrue(condutor.getTelefone() != null, "Error digite uma telefone");
-        String regexTelefone = "\\+\\d{2}\\(\\d{3}\\)\\d{5}-\\d{4}";
+        String regexTelefone = "^\\+\\d{2}\\(\\d{3}\\)\\d{5}-\\d{4}$";
         Assert.isTrue(condutor.getTelefone().matches(regexTelefone), "Mascara de telefone invalida");
         Assert.isTrue(this.condutorRepository.findTelefone(condutor.getTelefone()).isEmpty(), "Telefone já existente.");
 
@@ -55,7 +55,7 @@ public class CondutorService {
 
         //Verifica o TELEFONE
         Assert.isTrue(condutor.getTelefone() != null, "Error digite um telefone");
-        String regexTelefone = "\\+\\d{2}\\(\\d{3}\\)\\d{5}-\\d{4}";
+        String regexTelefone = "^\\+\\d{2}\\(\\d{3}\\)\\d{5}-\\d{4}$";
         Assert.isTrue(!condutor.getTelefone().matches(regexTelefone), "Mascara de telefone invalida");
         Assert.isTrue(this.condutorRepository.findTelefone(condutor.getTelefone()).isEmpty(), "Telefone já existente.");
 

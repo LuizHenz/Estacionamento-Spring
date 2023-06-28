@@ -72,7 +72,7 @@ public class CondutorController {
             if(condutorData == null || !condutorData.getId().equals(condutor.getId())){
                 throw new RuntimeException("Registro nao identificado");
             }
-
+            this.condutorService.editar(condutorData);
             this.condutorRepository.save(condutor);
             return ResponseEntity.ok("Registro atualizado");
         }catch (DataIntegrityViolationException ex){
